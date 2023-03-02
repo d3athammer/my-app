@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getMovies } from '../services/fakeMovieService';
 import { deleteMovie } from '../services/fakeMovieService';
+import Like from './common/like';
 
 class Movies extends Component {
       state = {
@@ -10,6 +11,10 @@ class Movies extends Component {
   deleteMovie = id => {
     deleteMovie(id)
     this.setState({movies: this.state.movies})
+   }
+
+   clickHandle = () => {
+    this.setState({liked: !this.state.like})
    }
 
   render() {
@@ -25,6 +30,7 @@ class Movies extends Component {
               <th>Genre</th>
               <th>Stock</th>
               <th>Rate</th>
+              <th>Like</th>
               <th></th>
             </tr>
           </thead>
@@ -35,6 +41,7 @@ class Movies extends Component {
                 <td>{movie.genre.name}</td>
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
+                <td><Like /></td>
                 <td><button onClick={()=> this.deleteMovie(movie._id)} className="btn btn-danger">Delete</button></td>
               </tr>
             ))}
