@@ -15,7 +15,6 @@ class Movies extends Component {
    }
 
    handleLike= (movie) => {
-    console.log("clicked");
     const updatedMovies = [...this.state.movies];
     const index = updatedMovies.findIndex((m) => m._id === movie._id);
     updatedMovies[index] = { ...updatedMovies[index] };

@@ -9,7 +9,7 @@ class Like extends Component {
 
     return (
       <div>
-      <i className={this.props.liked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={() => this.props.onClick()}></i>
+      <i style={{cursor: 'pointer'}} className={this.props.liked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={() => this.props.onClick()}></i>
       </div>
     );
   }
