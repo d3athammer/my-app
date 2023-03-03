@@ -5,9 +5,11 @@ class Like extends Component {
 
   render() {
 
+
+
     return (
       <div>
-      <i class="fa-solid fa-heart"></i>
+      <i className={this.props.liked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={() => this.props.onClick()}></i>
       </div>
     );
   }
