@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
-import { getMovies } from '../services/fakeMovieService';
-import { deleteMovie } from '../services/fakeMovieService';
+import { getMovies, deleteMovie } from '../services/fakeMovieService';
 import { getGenres } from '../services/fakeGenreService';
 import Pagination from './common/pagination';
 import ListGroup from './listGroup';
@@ -11,15 +10,16 @@ class Movies extends Component {
       state = {
     allMovies: [],
     allGenres: [],
-    selectedGenre:[],
-    currentGenre: 'All Genres',
+    currentGenre: [],
+    currentGenrePageNumbers: {},
     liked: false,
     pageSize: 3,
     currentPage: 1
    };
 
    componentDidMount () {
-    this.setState({allMovies: getMovies(), allGenres: getGenres()})
+    const allGenres = [{name: "All Genres"}, ...getGenres()]
+    this.setState({allMovies: getMovies(), allGenres})
    }
 
   deleteMovie = id => {
@@ -42,22 +42,29 @@ class Movies extends Component {
     this.setState({currentPage: page})
   }
 
-// handling list group side bar
-  handleGenreSelect = (genre) => {
-    console.log(genre);
-  }
+  // Selecting the genre from your list
+  // handleGenreSelect = (genre) => {
+  //   this.setState({ selectedGenre: genre, currentPage: 1})
+  // }
 
   handleGenreSelect = (genre) => {
-    this.setState({ selectedGenre: genre })
-  }
-
-
+  this.setState(prevState => ({
+    ...prevState,
+    selectedGenre: genre
+  }));
+}
 
 
   render() {
-    const { allMovies, pageSize, currentPage, allGenres} = this.state;
+    const { allMovies, selectedGenre, pageSize, currentPage, allGenres} = this.state;
 
-    const movies = paginate(allMovies, currentPage, pageSize);
+    // filtering selections based on genre
+    const filtered = selectedGenre && selectedGenre._id
+      ? allMovies.filter(m => m.genre._id === selectedGenre._id)
+      : allMovies;
+
+    // Will only include movies that are under the selected category
+    const movies = paginate(filtered, currentPage, pageSize);
 
     return (
       <div className='row mt-5'>
@@ -65,12 +72,12 @@ class Movies extends Component {
           <ListGroup
             items={allGenres}
             onItemSelect={this.handleGenreSelect}
-            selectedItem={this.state.selectedGenre}
+            selectedItem={selectedGenre}
              />
         </div>
         <div className="col-9">
           <p>
-            {allMovies === 0 ? "0 movies available" : `showing ${allMovies.length} movies in the database`}
+            {filtered.length === 0 ? "0 movies available" : `showing ${filtered.length} movies in the database`}
           </p>
           <table className="table">
             <thead>
@@ -97,7 +104,7 @@ class Movies extends Component {
             </tbody>
           </table>
           <Pagination
-              itemsCount={allMovies.length}
+              itemsCount={filtered.length}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}

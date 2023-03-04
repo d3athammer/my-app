@@ -12,7 +12,6 @@ class ListGroup extends Component {
 
     return (
       <ul className="list-group">
-      <li className='list-group-item' >All Genres</li>
       {items.map( item => (
       <li
         key={item[valueProperty]}
@@ -22,7 +21,6 @@ class ListGroup extends Component {
         {item[textProperty]}
       </li>
       ))}
-
       </ul>
     );
   }
