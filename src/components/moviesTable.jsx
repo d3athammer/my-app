@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Like from './common/like';
 
-const MoviesTable = ({ movies, onDelete, onLike }) => {
+const MoviesTable = ({ movies, onDelete, onLike, onSort }) => {
   // extrating movies table
 
   // 1. Destructor all the props that we are using
@@ -14,10 +14,10 @@ const MoviesTable = ({ movies, onDelete, onLike }) => {
     <table className="table">
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Genre</th>
-          <th>Stock</th>
-          <th>Rate</th>
+          <th onClick={() => onSort('Title')} >Title</th>
+          <th onClick={() => onSort('genre.name')} >Genre</th>
+          <th onClick={() => onSort('numberInStock')} >Stock</th>
+          <th onClick={() => onSort('dailyRentalRate')} >Rate</th>
           <th>Like</th>
           <th></th>
         </tr>
