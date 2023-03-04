@@ -1,4 +1,4 @@
-import _ from 'loDash';
+import _ from 'lodash';
 
 //1. takes in array of items to be paginated,
 //2. current pagenumber

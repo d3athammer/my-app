@@ -2,11 +2,12 @@ import React, { Component} from 'react';
 import { getMovies } from '../services/fakeMovieService';
 import { deleteMovie } from '../services/fakeMovieService';
 import Pagination from './common/pagination';
+import { paginate } from '../utils/paginate';
 import Like from './common/like';
 
 class Movies extends Component {
       state = {
-    movies: getMovies(),
+    allMovies: getMovies(),
     liked: false,
     pageSize: 3,
     currentPage: 1
@@ -35,11 +36,13 @@ class Movies extends Component {
   currentPage
 
   render() {
-    const { movies, pageSize, currentPage } = this.state;
+    const { movies: allMovies, pageSize, currentPage } = this.state;
+
+    const movies = paginate(allMovies, currentPage, pageSize)
     return (
       <div>
         <p>
-          {this.state.movies === 0 ? "0 movies available" : `showing ${this.state.movies.length} movies in the database`}
+          {allMovies === 0 ? "0 movies available" : `showing ${allMovies.length} movies in the database`}
         </p>
         <table className="table">
           <thead>
@@ -53,7 +56,7 @@ class Movies extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.movies.map( movie => (
+            {movies.map( movie => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
