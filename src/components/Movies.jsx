@@ -15,15 +15,15 @@ class Movies extends Component {
 
   deleteMovie = id => {
     deleteMovie(id)
-    this.setState({movies: this.state.movies})
+    this.setState({allMovies: this.state.allMovies})
    }
 
   handleLike= (movie) => {
-    const updatedMovies = [...this.state.movies];
+    const updatedMovies = [...this.state.allMovies];
     const index = updatedMovies.findIndex((m) => m._id === movie._id);
     updatedMovies[index] = { ...updatedMovies[index] };
     updatedMovies[index].liked = !updatedMovies[index].liked;
-     this.setState({ movies: updatedMovies });
+     this.setState({ allMovies: updatedMovies });
    }
 
 // handling pages
@@ -36,9 +36,10 @@ class Movies extends Component {
   currentPage
 
   render() {
-    const { movies: allMovies, pageSize, currentPage } = this.state;
+    const { allMovies, pageSize, currentPage } = this.state;
 
-    const movies = paginate(allMovies, currentPage, pageSize)
+    const movies = paginate(allMovies, currentPage, pageSize);
+
     return (
       <div>
         <p>
@@ -69,10 +70,11 @@ class Movies extends Component {
           </tbody>
         </table>
          <Pagination
-            itemsCount={movies.length}
+            itemsCount={allMovies.length}
             pageSize={pageSize}
             currentPage={currentPage}
-            onPageChange={this.handlePageChange} />
+            onPageChange={this.handlePageChange}
+         />
       </div>
     );
   }
