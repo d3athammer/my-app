@@ -5,8 +5,11 @@ const MoviesTable = ({ movies, onDelete, onLike }) => {
   // extrating movies table
 
   // 1. Destructor all the props that we are using
+  // 2. import needed components
+  // 3. Edit the props to the props created
+  // 4. Create the props from parent table
+  // 5. Make sure all the functions are named correctly and viola!
 
-  // 2. Edit the props to the props created
   return (
     <table className="table">
       <thead>
