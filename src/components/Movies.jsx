@@ -5,20 +5,20 @@ import Pagination from './common/pagination';
 import ListGroup from './listGroup';
 import { paginate } from '../utils/paginate';
 import MoviesTable from './moviesTable';
+import _ from 'lodash';
 
 class Movies extends Component {
       state = {
     allMovies: [],
     allGenres: [],
-    currentGenre: [],
-    currentGenrePageNumbers: {},
     liked: false,
     pageSize: 3,
-    currentPage: 1
+    currentPage: 1,
+    sortColumn: { path: 'title', order: 'asc'}
    };
 
    componentDidMount () {
-    const allGenres = [{_id: "", name: "All Genres"}, ...getGenres()]
+    const allGenres = [{ _id: "", name: "All Genres"}, ...getGenres()]
     this.setState({allMovies: getMovies(), allGenres})
    }
 
@@ -43,32 +43,36 @@ class Movies extends Component {
   }
 
   // Selecting the genre from your list
-  // handleGenreSelect = (genre) => {
-  //   this.setState({ selectedGenre: genre, currentPage: 1})
-  // }
-
   handleGenreSelect = (genre) => {
-  this.setState(prevState => ({
-    ...prevState,
-    selectedGenre: genre
-  }));
-}
+    this.setState({ selectedGenre: genre, currentPage: 1})
+  }
 
+  // To apply the sort when headings are clicked on
   handleSort = path => {
-    console.log(path);
+    // get the full array
+    const sortColumn = { ...this.state.sortColumn };
+    // get the title of sort, change order of the column
+    if (sortColumn.path === path) {
+      sortColumn.order = sortColumn.order === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortColumn.path = path;
+      sortColumn.order = 'asc';
+    }
+    this.setState({ sortColumn })
   }
 
 
   render() {
-    const { allMovies, selectedGenre, pageSize, currentPage, allGenres} = this.state;
+    const { allMovies, selectedGenre, pageSize, currentPage, sortColumn, allGenres} = this.state;
 
     // filtering selections based on genre
     const filtered = selectedGenre && selectedGenre._id
       ? allMovies.filter(m => m.genre._id === selectedGenre._id)
       : allMovies;
-
-    // Will only include movies that are under the selected category
-    const movies = paginate(filtered, currentPage, pageSize);
+    // take the filtered list, sort by name of column, and in which order respectively
+      const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
+    // Will only include movies that are under the selected SORTED category
+    const movies = paginate(sorted, currentPage, pageSize);
 
     return (
       <div className='row mt-5'>
