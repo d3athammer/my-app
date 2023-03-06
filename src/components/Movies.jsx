@@ -48,16 +48,7 @@ class Movies extends Component {
   }
 
   // To apply the sort when headings are clicked on
-  handleSort = path => {
-    // get the full array
-    const sortColumn = { ...this.state.sortColumn };
-    // get the title of sort, change order of the column
-    if (sortColumn.path === path) {
-      sortColumn.order = sortColumn.order === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortColumn.path = path;
-      sortColumn.order = 'asc';
-    }
+  handleSort = sortColumn => {
     this.setState({ sortColumn })
   }
 
@@ -89,6 +80,7 @@ class Movies extends Component {
           </p>
           <MoviesTable
             movies={movies}
+            sortColumn={sortColumn}
             onLike={this.handleLike}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
